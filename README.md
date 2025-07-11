@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Worker Check-in System
+
+A Next.js application for managing worker check-ins via automated phone calls. The system uses AI to call workers, collect status updates, and provide summaries to supervisors.
+
+## Features
+
+- **Admin Dashboard**: Monitor worker status and call history
+- **Worker Management**: Add, edit, and manage worker profiles
+- **Automated Calls**: Schedule and initiate automated check-in calls
+- **Email Summaries**: Send call summaries to supervisors via email
+- **Dark-themed Admin UI**: Modern interface with dark sidebar and orange accent branding
+
+## Tech Stack
+
+- **Frontend**: Next.js with Tailwind CSS
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: (Add your auth solution here)
+- **Styling**: Tailwind CSS v3
+- **Email**: Nodemailer
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 16+
+- PostgreSQL database
+- SMTP server for email functionality
+
+### Environment Setup
+
+Create a `.env` file in the root directory with the following variables:
+
+```
+DATABASE_URL="postgresql://username:password@localhost:5432/worker_checkin"
+# Add other environment variables as needed
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Install dependencies
+npm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Run database migrations
+npx prisma migrate dev
 
-## Learn More
+# Start the development server
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Open [http://localhost:3005](http://localhost:3005) with your browser to see the application.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `/src/pages` - Next.js pages
+- `/src/components` - React components
+- `/lib` - Shared utilities including database client
+- `/prisma` - Database schema and migrations
 
-## Deploy on Vercel
+## API Endpoints
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `/api/workers` - Worker management
+- `/api/calls` - Call management
+- `/api/calls/send-summary` - Email summary functionality
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Important Notes
+
+- All API endpoints use the shared Prisma client from `lib/db.ts`
+- The system allows initiating multiple calls for the same worker regardless of status
+- Path aliases: `@/` points to the `src/` directory

@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Company {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  vapiApiKey              String?
+  vapiPhoneNumberId       String?
+  constructionAssistantId String?
+  automotiveAssistantId   String?
+  hospitalityAssistantId  String?
+
+  fromEmail       String?
+  smtpHost        String?
+  smtpPort        Int?
+  smtpUsername    String?
+  smtpPassword    String?
+
+  defaultTimezone String @default("Australia/Sydney")
+  defaultCallTime String @default("09:00")
+  workdays        Int[]  @default([1, 2, 3, 4, 5])
+
+  workers Worker[]
+  calls   Call[]
+
+  @@map("companies")
+}
+
+enum IndustryType {
+  CONSTRUCTION
+  AUTOMOTIVE
+  HOSPITALITY
+  RETAIL
+  OTHER
+
+  @@map("industry_type")
+}
+
+enum WorkerStatus {
+  NOT_CALLED
+  CALLED
+  COMPLETED
+  INACTIVE
+
+  @@map("worker_status")
+}
+
+model Worker {
+  id                String       @id @default(cuid())
+  phoneNumber       String
+  name              String
+  jobSite           String
+  role              String
+  industryType      IndustryType
+  supervisorEmail   String
+  status            WorkerStatus @default(NOT_CALLED)
+  timezone          String       @default("Australia/Sydney")
+  preferredCallTime String       @default("09:00")
+  isActive          Boolean      @default(true)
+
+  lastCallDate    DateTime?
+  totalCalls      Int       @default(0)
+  avgCallDuration Float?
+  responseRate    Float?
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  calls     Call[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("workers")
+}
+
+enum CallStatus {
+  INITIATED
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  CANCELLED
+
+  @@map("call_status")
+}
+
+model Call {
+  id            String       @id @default(cuid())
+  vapiCallId    String?      @unique
+  phoneNumber   String
+  workerName    String
+  jobSite       String
+  industryType  IndustryType
+  assistantType String
+
+  status    CallStatus @default(INITIATED)
+  startTime DateTime   @default(now())
+  endTime   DateTime?
+  duration  Int?
+  endReason String?
+
+  transcript     String?
+  summary        String?
+  recordingUrl   String?
+  s3RecordingKey String?
+
+  sentiment       String?
+  keyTopics       String[] @default([])
+  actionItems     String[] @default([])
+  complianceFlags String[] @default([])
+
+  workerId  String
+  worker    Worker  @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("calls")
+}
+
+model ScheduledCall {
+  id           String    @id @default(cuid())
+  workerId     String
+  scheduledFor DateTime
+  executed     Boolean   @default(false)
+  executedAt   DateTime?
+  callId       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("scheduled_calls")
+}
