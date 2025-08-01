@@ -1,3 +1,7 @@
+<p align="left">
+  <img src="https://private-equity-assets.s3.ap-southeast-2.amazonaws.com/logos/Group+1957+(1).png" alt="Junify Logo" width="200">
+</p>
+
 # Worker Check-in System
 
 A Next.js application for managing worker check-ins via automated phone calls. The system uses AI to call workers, collect status updates, and provide summaries to supervisors.
