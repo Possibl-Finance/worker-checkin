@@ -36,7 +36,38 @@ Create a `.env` file in the root directory with the following variables:
 
 ```
 DATABASE_URL="postgresql://username:password@localhost:5432/worker_checkin"
-# Add other environment variables as needed
+
+# Redis (for job queue) 
+REDIS_URL=
+
+# VAPI Configuration
+VAPI_API_KEY=
+VAPI_PHONE_NUMBER_ID=
+
+# Assistant IDs for different industries
+VAPI_CONSTRUCTION_ASSISTANT_ID=
+VAPI_AUTOMOTIVE_ASSISTANT_ID=
+VAPI_HOSPITALITY_ASSISTANT_ID=
+
+# Email Configuration
+RESEND_API_KEY=
+FROM_EMAIL=
+
+# App Configuration
+NEXT_PUBLIC_APP_URL=
+WEBHOOK_SECRET=
+
+# Junify Auth (if using)
+JUNIFY_API_URL=
+JUNIFY_CLIENT_ID=
+JUNIFY_CLIENT_SECRET=
+
+# Optional: NextAuth (alternative to Junify)
+NEXTAUTH_SECRET=
+NEXTAUTH_URL=
+# Gmail Configuration
+GMAIL_USER=
+GMAIL_APP_PASSWORD=
 ```
 
 ### Installation
